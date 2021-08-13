@@ -1,11 +1,13 @@
 package egovframework.example.test.web;
 
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,15 +38,29 @@ public class PublicData extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
+		
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+		String today = sdf.format(date);
+		
+		
+		//7일 전 날짜
+		Date dDate = new Date();
+		dDate = new Date(dDate.getTime()+(1000*60*60*24*-6));
+		SimpleDateFormat dSdf = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+		String beforeDay = dSdf.format(dDate);
+		
+		System.out.println(dDate);
+		System.out.println(beforeDay);
+
 
 		String addr = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey="; //uri
 		String serviceKey = "BKk%2B0sack1Bq9UNR1WeJK8IVAiu6yw4KtwaMG5jUcHalBqqQw5X91m%2FCaAXadKZDfJQlRCopa7%2FXhjrvm6qWhQ%3D%3D";
 		String parameter = "";
 		PrintWriter out = response.getWriter();
 		parameter = parameter + "&" + "pageNo=1";
-		parameter = parameter + "&" + "numOfRows=10";
-		parameter = parameter + "&" + "startCreateDt=20210811";
-		parameter = parameter + "&" + "endCreateDt=20210811";
+		parameter = parameter + "&" + "startCreateDt=" + beforeDay;
+		parameter = parameter + "&" + "endCreateDt=" + today;
 		parameter = parameter + "&" + "_type=json";
 		
 		addr = addr + serviceKey + parameter;
